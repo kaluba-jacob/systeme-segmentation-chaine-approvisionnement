@@ -47,3 +47,5 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+donnees/data2.xlsx
