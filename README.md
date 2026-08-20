@@ -13,6 +13,7 @@ L'objectif est de classifier les entreprises selon la structure de leur base fou
 2.  L'effet modérateur de la transformation digitale
 3.  L'effet modérateur de l'adoption d'une chaîne verte
 4.  L'impact de la classification sur la performance économique (ROAA)
+5.  L'évolution de cette relation avant et après la crise sanitaire
 
 ## 🎯 Objectifs de recherche
 
@@ -21,6 +22,7 @@ L'objectif est de classifier les entreprises selon la structure de leur base fou
 - Évaluer si la digitalisation renforce la performance des différentes configurations
 - Tester l'association entre chaîne verte et profils de chaîne d'approvisionnement
 - Estimer économétriquement l'impact de la classification sur la rentabilité
+- Vérifier la robustesse des résultats et corriger les biais d'endogénéité
 
 ## 📊 Données
 
@@ -34,13 +36,12 @@ L'objectif est de classifier les entreprises selon la structure de leur base fou
 
 ## 🛠️ Méthodologie
 
-Le projet est structuré en 4 scripts reproductibles :
+Le projet est structuré en 5 scripts reproductibles :
 
 ### Étape 1 : Prétraitement des données
 `R/01_pretraitement_donnees.R`
 - Nettoyage et agrégation par période
 - Construction des indicateurs de structure de chaîne
-- Simulation d'indicateurs métier complémentaires
 - Winsorisation à 1% des valeurs extrêmes
 - Standardisation Z-score
 
@@ -59,17 +60,24 @@ Le projet est structuré en 4 scripts reproductibles :
 - Test du Chi-deux d'indépendance
 - Performance économique (ROAA) par profil
 
-### Étape 4 : Modèles économétriques
+### Étape 4 : Modèles économétriques de base
 `R/04_regressions_econometriques.R`
 - Régressions OLS avec erreurs standards robustes à l'hétéroscédasticité
 - Effets fixes secteur
 - Variables de contrôle : croissance des actifs, productivité verte, nature de la propriété
 - Modèles d'interaction pour tester les effets modérateurs
 
+### Étape 5 : Approfondissement économétrique et robustesse
+`R/05_approfondissement_econometrique.R`
+- Tests de robustesse sur échantillon restreint (exclusion des valeurs extrêmes)
+- Analyse hétérogène par niveau de digitalisation
+- Correction d'endogénéité par appariement sur score de propension (PSM)
+- Comparaison des effets sur les périodes T1 et T2
+
 ## 📌 Principaux résultats
 
 ### Classification
-- **4 profils fournisseurs** : du profil vulnérable (faible digital, forte concentration) au profil résilient
+- **4 profils fournisseurs** : du profil vulnérable (forte concentration, faible résilience) au profil diversifié et résilient
 - **3 profils clients** : du profil concentré au profil diversifié et performant
 - Toutes les répartitions sont statistiquement exploitables
 
@@ -78,36 +86,57 @@ Le projet est structuré en 4 scripts reproductibles :
 - Les clusters fournisseurs les plus performants présentent un niveau de digitalisation supérieur
 - Le cluster le plus vulnérable cumule faible digitalisation, faible taux de chaîne verte et rentabilité inférieure
 
-### Impact sur la performance
+### Impact sur la performance (période T2)
 - Appartenir aux meilleurs clusters fournisseurs est associé à un **ROAA supérieur de 3 à 4 points** par rapport au groupe de référence, après contrôle des variables de confusion
 - L'effet est statistiquement très significatif (p < 0,001)
 - La digitalisation ne présente pas d'effet modérateur additionnel significatif sur la relation chaîne–performance
 
-## 📁 Structure du projet
+### Résultat majeur : inversion de la hiérarchie entre T1 et T2
+La crise sanitaire a profondément modifié la relation entre structure de chaîne et performance :
+- **Avant la pandémie (T1)** : les structures concentrées (cluster 1) étaient plus rentables que les structures diversifiées
+- **Après la pandémie (T2)** : les structures diversifiées et résilientes (clusters 2 et 3) deviennent significativement plus performantes
 
-```
-R/ : Scripts d'analyse exécutables dans l'ordre numérique
-01_pretraitement_donnees.R : Nettoyage, agrégation par période, winsorisation et standardisation
-02_clustering_kmeans.R : Classification K-means double + analyse de migration T1/T2
-03_analyse_moderateurs.R : Étude des effets digital et chaîne verte par cluster
-04_regressions_econometriques.R : Modèles OLS avec effets fixes et erreurs robustes
-donnees/ : Fichiers de données intermédiaires au format .rds
-Les données brutes et fichiers générés sont ignorés par .gitignore
-resultats/ : Sorties automatiques de l'analyse
-clustering/ : Graphiques du coude, profils des clusters, matrices de migration
-moderateurs/ : Tableaux et graphiques sur les effets modérateurs
-regressions/ : Tableaux des modèles économétriques exportés en CSV
-Fichiers racine
-.gitignore : Fichiers à exclure du versionnement
-README.md : Documentation du projet
-systeme-segmentation-chaine-approvisionnement.Rproj : Projet RStudio
-```
+> Ce renversement de la hiérarchie met en évidence la valeur de la résilience de la chaîne d'approvisionnement en période de choc.
+
+### Effet causal de la chaîne verte (PSM)
+Après appariement sur score de propension pour neutraliser les biais de sélection :
+- Les entreprises ayant adopté une chaîne verte présentent un **ROAA supérieur de 1,45 point** par rapport à des entreprises comparables sans chaîne verte
+- L'effet est robuste et confirme l'existence d'un gain économique lié à la transition verte
+
+### Tests de robustesse
+- Les résultats principaux restent significatifs après exclusion des valeurs extrêmes de ROAA
+- L'effet de la classification est présent dans les deux groupes de digitalisation, mais plus marqué dans les entreprises faiblement digitalisées
+
+## 📂 Structure du projet
+
+- **`R/`** : Scripts d'analyse exécutables dans l'ordre numérique
+  - `01_pretraitement_donnees.R` : Nettoyage, agrégation par période, winsorisation et standardisation
+  - `02_clustering_kmeans.R` : Classification K-means double + analyse de migration T1/T2
+  - `03_analyse_moderateurs.R` : Étude des effets digital et chaîne verte par cluster
+  - `04_regressions_econometriques.R` : Modèles OLS avec effets fixes et erreurs robustes
+  - `05_approfondissement_econometrique.R` : Robustesse, hétérogénéité et PSM
+
+- **`donnees/`** : Fichiers de données intermédiaires au format `.rds`
+  - Les données brutes et fichiers générés sont ignorés par `.gitignore`
+
+- **`resultats/`** : Sorties automatiques de l'analyse
+  - `clustering/` : Graphiques du coude, profils des clusters, matrices de migration
+  - `moderateurs/` : Tableaux et graphiques sur les effets modérateurs
+  - `regressions/` : Tableaux des modèles économétriques de base
+  - `robustesse/` : Tableaux des tests de robustesse, hétérogénéité et PSM
+
+- **`powerbi/`** : Dossier d'accueil pour le futur tableau de bord interactif
+
+- Fichiers racine
+  - `.gitignore` : Fichiers à exclure du versionnement
+  - `README.md` : Documentation du projet
+  - `systeme-segmentation-chaine-approvisionnement.Rproj` : Projet RStudio
 
 ## 🚀 Pour reproduire l'analyse
 
 1.  Cloner le dépôt
 2.  Placer le fichier de données brutes `data2.xlsx` dans le dossier `donnees/`
-3.  Exécuter les scripts dans l'ordre numérique
+3.  Exécuter les scripts dans l'ordre numérique de 01 à 05
 4.  Tous les résultats (graphiques et tableaux CSV) sont générés automatiquement dans le dossier `resultats/`
 
 ## 🧰 Technologies utilisées
@@ -117,7 +146,8 @@ systeme-segmentation-chaine-approvisionnement.Rproj : Projet RStudio
 - `readxl` pour l'import Excel
 - `factoextra` pour la détermination du nombre de clusters
 - `fixest` pour les régressions à haute performance et erreurs robustes
+- `MatchIt` pour l'appariement sur score de propension (PSM)
 
 ## 📝 Auteur
 
-Projet réalisé par **[kaluba luboya jacob]** dans le cadre d'un travail de recherche sur la résilience des chaînes d'approvisionnement et la transformation verte.
+Projet réalisé par **kaluba luboya jacob** dans le cadre d'un travail de recherche sur la résilience des chaînes d'approvisionnement et la transformation verte.
