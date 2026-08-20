@@ -1,5 +1,5 @@
-niveau_fournisseur;effectif;pourcentage;conc_fourn_moy;volatilite_fourn;ratio_depcap_moy;taux_livraison_heure;taux_defaut
-1;190;6,6;42,60;0,16;0,52;84,04;4,62
-2;1411;48,9;26,71;0,13;0,10;84,55;4,28
-3;615;21,3;59,03;0,09;0,11;85,18;3,90
-4;672;23,3;28,22;0,32;0,11;81,61;6,35
+niveau_fournisseur,effectif,pourcentage,conc_fourn_moy,volatilite_fourn,ratio_depcap_moy,taux_livraison_heure,taux_defaut
+1,190,6.6,42.6,0.16,0.52,84.04,4.62
+2,1411,48.9,26.71,0.13,0.1,84.55,4.28
+3,615,21.3,59.03,0.09,0.11,85.18,3.9
+4,672,23.3,28.22,0.32,0.11,81.61,6.35

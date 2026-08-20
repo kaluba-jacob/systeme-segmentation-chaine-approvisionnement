@@ -100,9 +100,9 @@ profil_fourn_T2 <- profiler_clusters(donnees_T2, niveau_fournisseur, vars_fourn_
 profil_client_T1 <- profiler_clusters(donnees_T1, niveau_client, vars_clients_originales)
 profil_client_T2 <- profiler_clusters(donnees_T2, niveau_client, vars_clients_originales)
 
-# Sauvegarde des tableaux de profil
-write_csv2(profil_fourn_T2, "resultats/clustering/profil_fournisseurs_T2.csv")
-write_csv2(profil_client_T2, "resultats/clustering/profil_clients_T2.csv")
+# Sauvegarde des tableaux de profil (format CSV standard virgule)
+write_csv(profil_fourn_T2, "resultats/clustering/profil_fournisseurs_T2.csv")
+write_csv(profil_client_T2, "resultats/clustering/profil_clients_T2.csv")
 
 # 5. Analyse de migration T1 → T2 ----------------------------------------------
 # On ne garde que les entreprises présentes dans les deux périodes (panel équilibré)
@@ -127,8 +127,8 @@ migration_clients <- entreprises_communes %>%
   mutate(pourcentage = round(n / sum(n) * 100, 1)) %>%
   ungroup()
 
-write_csv2(migration_fourn, "resultats/clustering/migration_fournisseurs.csv")
-write_csv2(migration_clients, "resultats/clustering/migration_clients.csv")
+write_csv(migration_fourn, "resultats/clustering/migration_fournisseurs.csv")
+write_csv(migration_clients, "resultats/clustering/migration_clients.csv")
 
 # 6. Analyse croisée double extrémité (fournisseurs × clients) -----------------
 croise_T2 <- donnees_T2 %>%
@@ -137,7 +137,7 @@ croise_T2 <- donnees_T2 %>%
   mutate(pourcentage = round(n / sum(n) * 100, 1)) %>%
   ungroup()
 
-write_csv2(croise_T2, "resultats/clustering/croise_fourn_clients_T2.csv")
+write_csv(croise_T2, "resultats/clustering/croise_fourn_clients_T2.csv")
 
 # 7. Sauvegarde des données avec labels de clustering --------------------------
 saveRDS(donnees_T1, "donnees/donnees_clustering_T1.rds")

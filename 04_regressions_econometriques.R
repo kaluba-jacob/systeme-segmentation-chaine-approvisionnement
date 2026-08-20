@@ -70,7 +70,7 @@ modele_4a <- feols(roaa ~ niveau_fourn * chaine_verte + croissance + productivit
 modele_4b <- feols(roaa ~ niveau_client * chaine_verte + croissance + productivite_verte + propriete | secteur,
                    data = data_reg, vcov = "hetero")
 
-# 5. Export des tableaux de résultats -----------------------------------------
+# 5. Export des tableaux de résultats (format CSV standard virgule) ------------
 
 # Tableau récapitulatif des modèles de base
 resultats_base <- etable(modele_1a, modele_1b, modele_2b,
@@ -79,7 +79,7 @@ resultats_base <- etable(modele_1a, modele_1b, modele_2b,
                          digits = 4)
 
 write.table(resultats_base, "resultats/regressions/tableau_modeles_base.csv",
-            sep = ";", row.names = TRUE, col.names = NA)
+            sep = ",", row.names = TRUE, col.names = NA)
 
 # Tableau des effets modérateurs digital
 resultats_digital <- etable(modele_3a, modele_3b,
@@ -88,7 +88,7 @@ resultats_digital <- etable(modele_3a, modele_3b,
                             digits = 4)
 
 write.table(resultats_digital, "resultats/regressions/tableau_moderateur_digital.csv",
-            sep = ";", row.names = TRUE, col.names = NA)
+            sep = ",", row.names = TRUE, col.names = NA)
 
 # Tableau des effets modérateurs chaîne verte
 resultats_verte <- etable(modele_4a, modele_4b,
@@ -97,10 +97,10 @@ resultats_verte <- etable(modele_4a, modele_4b,
                           digits = 4)
 
 write.table(resultats_verte, "resultats/regressions/tableau_moderateur_verte.csv",
-            sep = ";", row.names = TRUE, col.names = NA)
+            sep = ",", row.names = TRUE, col.names = NA)
 
 # 6. Bilan console -------------------------------------------------------------
-cat(" Régressions économétriques terminées avec succès\n")
+cat("✅ Régressions économétriques terminées avec succès\n")
 cat("----------------------------------------\n")
 cat("Nombre d'observations dans les régressions :", nrow(data_reg), "\n")
 cat("\n--- Modèle 1b : Performance ~ Niveau fournisseur + contrôles ---\n")

@@ -108,10 +108,10 @@ perf_client_T2 <- donnees_T2 %>%
     .groups = "drop"
   )
 
-# 5. Sauvegarde des tableaux de résultats --------------------------------------
-write_csv2(digital_fourn_T2, "resultats/moderateurs/digital_fournisseurs_T2.csv")
-write_csv2(verte_fourn_T2, "resultats/moderateurs/verte_fournisseurs_T2.csv")
-write_csv2(perf_fourn_T2, "resultats/moderateurs/performance_fournisseurs_T2.csv")
+# 5. Sauvegarde des tableaux de résultats (format CSV standard virgule) --------
+write_csv(digital_fourn_T2, "resultats/moderateurs/digital_fournisseurs_T2.csv")
+write_csv(verte_fourn_T2, "resultats/moderateurs/verte_fournisseurs_T2.csv")
+write_csv(perf_fourn_T2, "resultats/moderateurs/performance_fournisseurs_T2.csv")
 
 # 6. Bilan console -------------------------------------------------------------
 cat("✅ Analyse des effets modérateurs terminée\n")
