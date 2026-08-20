@@ -91,6 +91,52 @@ Le projet est structuré en 5 scripts reproductibles :
 - L'effet est statistiquement très significatif (p < 0,001)
 - La digitalisation ne présente pas d'effet modérateur additionnel significatif sur la relation chaîne–performance
 
+### 📊 Chiffres clés de l'étude
+
+#### Répartition des clusters (période T2)
+
+| Niveau fournisseur | Effectif | Part   | Profil associé                                        |
+|:-------------------|:--------:|:------:|:------------------------------------------------------|
+| 1                  |   190    |  6,6 % | Vulnérable : concentration élevée, faible résilience  |
+| 2                  |  1 411   | 48,9 % | Intermédiaire : structure équilibrée majoritaire      |
+| 3                  |   615    | 21,3 % | Performant : diversification et maîtrise des risques  |
+| 4                  |   672    | 23,3 % | Diversifié : base fournisseurs étendue                |
+
+| Niveau client | Effectif | Part   | Profil associé                              |
+|:--------------|:--------:|:------:|:--------------------------------------------|
+| 1             |   361    | 12,5 % | Concentré : forte dépendance clientèle      |
+| 2             |   885    | 30,6 % | Intermédiaire : portefeuille équilibré      |
+| 3             |  1 642   | 56,9 % | Diversifié : clientèle large et résiliente  |
+
+#### Impact de la classification sur la rentabilité
+
+Résultats des régressions avec contrôles et effets fixes secteur :
+
+| Groupe                  | Écart de ROAA par rapport au groupe de référence | Niveau de significativité |
+|:------------------------|:------------------------------------------------:|:-------------------------:|
+| Fournisseurs niveau 2   |                   + 3,7 points                   |       *** p < 0,001       |
+| Fournisseurs niveau 3   |                   + 3,9 points                   |       *** p < 0,001       |
+| Fournisseurs niveau 4   |                   + 3,3 points                   |        ** p < 0,01        |
+| Clients niveau 3        |                   + 1,7 points                   |        ** p < 0,05        |
+
+#### Effet causal de la chaîne verte (après appariement PSM)
+
+| Groupe                          | ROAA moyen |
+|:--------------------------------|:----------:|
+| Entreprises sans chaîne verte   |   4,06 %   |
+| Entreprises avec chaîne verte   |   5,51 %   |
+| **Gain moyen de rentabilité**   | **+ 1,45 point** |
+
+#### Inversion de la hiérarchie avant / après pandémie
+
+Effet du groupe fournisseurs niveau 2 par rapport au groupe 1 :
+
+| Période             | Effet sur la ROAA  | Interprétation                                       |
+|:--------------------|:------------------:|:-----------------------------------------------------|
+| T1 (2015 – 2018)    |  – 1,8 point ***   | La concentration fournisseur était plus rentable      |
+| T2 (2019 – 2023)    |  + 3,7 points ***  | La diversification résiliente devient plus performante |
+
+
 ### Résultat majeur : inversion de la hiérarchie entre T1 et T2
 La crise sanitaire a profondément modifié la relation entre structure de chaîne et performance :
 - **Avant la pandémie (T1)** : les structures concentrées (cluster 1) étaient plus rentables que les structures diversifiées
