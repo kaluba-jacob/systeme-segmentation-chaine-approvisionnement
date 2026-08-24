@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Si vous utilisez ce projet dans vos recherches, merci de le citer comme suit :"
+title: "Système de segmentation double de la chaîne d'approvisionnement"
+abstract: "Classification K-means fournisseurs × clients, analyse de résilience post-Covid et impact sur la performance économique des entreprises cotées."
+authors:
+  - family-names: "Kaluba Luboya"
+    given-names: "Jacob"
+date-released: 2026-08-21
+license: MIT
+repository-code: "https://github.com/kaluba-jacob/systeme-segmentation-chaine-approvisionnement"
+keywords:
+  - supply chain
+  - k-means clustering
+  - resilience
+  - green supply chain
+  - digital transformation
+  - econometrics
+  - PSM

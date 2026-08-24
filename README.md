@@ -153,6 +153,40 @@ Après appariement sur score de propension pour neutraliser les biais de sélect
 - Les résultats principaux restent significatifs après exclusion des valeurs extrêmes de ROAA
 - L'effet de la classification est présent dans les deux groupes de digitalisation, mais plus marqué dans les entreprises faiblement digitalisées
 
+## 💡 Implications managériales et recommandations stratégiques
+
+Au-delà des résultats statistiques, cette segmentation fournit des pistes d’action concrètes pour les directions de la chaîne d’approvisionnement.
+
+### Recommandations par profil de classification
+
+#### Côté fournisseurs
+
+| Profil | Diagnostic stratégique | Recommandations opérationnelles |
+|:---|:---|:---|
+| **Niveau 1 – Vulnérable** | Forte concentration, exposition majeure aux risques de rupture | 🚨 **Priorité haute** : lancer immédiatement un programme de diversification fournisseurs ; constituer un pool de fournisseurs de secours ; réduire la dépendance vis-à-vis des fournisseurs critiques |
+| **Niveau 2 – Intermédiaire** | Structure équilibrée majoritaire, risque modéré | ⚙️ **Optimisation** : maintenir l’équilibre actuel ; travailler sur la réduction des coûts par regroupement de commandes ; développer la digitalisation des échanges |
+| **Niveau 3 – Performant** | Bonne diversification et maîtrise des risques | 🤝 **Partenariat stratégique** : considérer ce périmètre comme le socle fournisseur de référence ; négocier des cadres de coopération à long terme ; mutualiser les efforts d’amélioration continue |
+| **Niveau 4 – Diversifié** | Base très étendue, complexité de gestion élevée | 📊 **Rationalisation** : consolider la base fournisseurs sur les articles à faible risque ; garder la diversification sur les postes stratégiques ; harmoniser les contrats et les processus |
+
+#### Côté clients
+
+| Profil | Diagnostic stratégique | Recommandations opérationnelles |
+|:---|:---|:---|
+| **Niveau 1 – Concentré** | Forte dépendance vis-à-vis de quelques clients majeurs | ⚠️ **Réduction du risque** : développer activement de nouveaux clients pour diminuer la concentration ; mettre en place des contrats pluriannuels pour sécuriser le chiffre d’affaires |
+| **Niveau 2 – Intermédiaire** | Portefeuille équilibré | 🎯 **Croissance ciblée** : maintenir la mixité client ; concentrer les efforts commerciaux sur les segments les plus rentables |
+| **Niveau 3 – Diversifié** | Clientèle large, faible risque de concentration | ✅ **Standardisation** : généraliser les processus de livraison et de service client ; optimiser les coûts de gestion grâce à la standardisation des offres |
+
+### Enseignement clé : la résilience est devenue un actif économique
+
+Le résultat le plus marquant de l’étude est le **renversement complet de la hiérarchie de performance** entre les deux périodes :
+
+> Avant la pandémie, une structure de chaîne concentrée permettait de meilleures marges grâce aux effets d’échelle et à l’optimisation des coûts.
+> Après la crise sanitaire, les entreprises disposant d’une chaîne diversifiée et résiliente affichent une rentabilité significativement supérieure.
+
+**Conclusion managériale** :
+Le passage d’une logique de **« cost optimization »** à une logique de **« resilience optimization »** n’est pas seulement un choix de prudence, c’est un investissement qui se traduit par un gain mesurable de rentabilité en période d’incertitude.
+
+
 ## 📂 Structure du projet
 
 - **`R/`** : Scripts d'analyse exécutables dans l'ordre numérique
