@@ -204,9 +204,7 @@ Le passage d’une logique de **« cost optimization »** à une logique de **«
   - `moderateurs/` : Tableaux et graphiques sur les effets modérateurs
   - `regressions/` : Tableaux des modèles économétriques de base
   - `robustesse/` : Tableaux des tests de robustesse, hétérogénéité et PSM
-
-- **`powerbi/`** : Dossier d'accueil pour le futur tableau de bord interactif
-
+  
 - Fichiers racine
   - `.gitignore` : Fichiers à exclure du versionnement
   - `README.md` : Documentation du projet
