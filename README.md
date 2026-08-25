@@ -1,12 +1,12 @@
 # Système de segmentation double de la chaîne d'approvisionnement
-
 > Étude empirique sur entreprises cotées : classification fournisseurs × clients, effets modérateurs de la transformation digitale et de la chaîne verte, et impact sur la performance économique.
+> Empirical study on listed companies: supplier–customer classification, moderating effects of digital transformation and green supply chain, and impact on economic performance.
+
 
 ## 📋 Présentation du projet
-
 Ce projet développe un système de segmentation bidirectionnel de la chaîne d'approvisionnement appliqué à un échantillon d'entreprises chinoises cotées sur deux périodes :
 - **Période T1** : 2015 – 2018 (avant la pandémie)
-- **Période T2** : 2019 – 2023 (pandémie et reprise post-Covid)
+- **Période T2** : 2019 – 2023 (pandémie et reprise post‑Covid)
 
 L'objectif est de classifier les entreprises selon la structure de leur base fournisseurs et de leur portefeuille clients, puis d'étudier :
 1.  La migration structurelle entre les deux périodes
@@ -14,18 +14,18 @@ L'objectif est de classifier les entreprises selon la structure de leur base fou
 3.  L'effet modérateur de l'adoption d'une chaîne verte
 4.  L'impact de la classification sur la performance économique (ROAA)
 5.  L'évolution de cette relation avant et après la crise sanitaire
+6.  Modélisation prédictive machine learning : prédire rentabilité et risque fournisseur
 
 ## 🎯 Objectifs de recherche
-
-- Construire une typologie des structures de chaîne d'approvisionnement par clustering K-means
+- Construire une typologie des structures de chaîne d'approvisionnement par clustering K‑means
 - Mesurer la résilience structurelle des entreprises avant et après la crise sanitaire
 - Évaluer si la digitalisation renforce la performance des différentes configurations
 - Tester l'association entre chaîne verte et profils de chaîne d'approvisionnement
 - Estimer économétriquement l'impact de la classification sur la rentabilité
 - Vérifier la robustesse des résultats et corriger les biais d'endogénéité
+- Développer des modèles prédictifs pour anticiper la rentabilité et le risque fournisseur des entreprises
 
 ## 📊 Données
-
 Échantillon de **3 227 entreprises** sur la période la plus récente (T2), avec 1 674 entreprises présentes sur les deux périodes (panel équilibré).
 
 **Sources** : Données financières et de chaîne d'approvisionnement d'entreprises cotées.
@@ -35,17 +35,16 @@ L'objectif est de classifier les entreprises selon la structure de leur base fou
 - Côté clients : concentration clientèle, volatilité du chiffre d'affaires, ratio de flux, délai de paiement, taux de retour
 
 ## 🛠️ Méthodologie
-
-Le projet est structuré en 5 scripts reproductibles :
+Le projet est structuré en 6 scripts reproductibles :
 
 ### Étape 1 : Prétraitement des données
 `R/01_pretraitement_donnees.R`
 - Nettoyage et agrégation par période
 - Construction des indicateurs de structure de chaîne
-- Winsorisation à 1% des valeurs extrêmes
-- Standardisation Z-score
+- Winsorisation à 1 % des valeurs extrêmes
+- Standardisation Z‑score
 
-### Étape 2 : Clustering K-means et analyse de migration
+### Étape 2 : Clustering K‑means et analyse de migration
 `R/02_clustering_kmeans.R`
 - Détermination du nombre optimal de clusters (méthode du coude)
 - Classification 4 niveaux côté fournisseurs
@@ -57,7 +56,7 @@ Le projet est structuré en 5 scripts reproductibles :
 `R/03_analyse_moderateurs.R`
 - Index de digitalisation moyen par cluster
 - Taux d'adoption de chaîne verte par cluster
-- Test du Chi-deux d'indépendance
+- Test du Chi‑deux d'indépendance
 - Performance économique (ROAA) par profil
 
 ### Étape 4 : Modèles économétriques de base
@@ -74,15 +73,22 @@ Le projet est structuré en 5 scripts reproductibles :
 - Correction d'endogénéité par appariement sur score de propension (PSM)
 - Comparaison des effets sur les périodes T1 et T2
 
-## 📌 Principaux résultats
+### Étape 6 : Modélisation prédictive Machine Learning
+`R/06_modelisation_predictive.R`
+- Modèle de régression : prédire la rentabilité ROAA
+- Modèle de classification forêt aléatoire : détecter les entreprises à risque fournisseur
+- Séparation train/test 80 % / 20 %
+- Calcul des métriques de performance et importance des variables
+- Sauvegarde des modèles entraînés au format `.rds`
 
+## 📌 Principaux résultats
 ### Classification
 - **4 profils fournisseurs** : du profil vulnérable (forte concentration, faible résilience) au profil diversifié et résilient
 - **3 profils clients** : du profil concentré au profil diversifié et performant
 - Toutes les répartitions sont statistiquement exploitables
 
 ### Effets modérateurs
-- L'adoption de chaîne verte diffère significativement entre clusters (test Chi-deux, p < 0,001)
+- L'adoption de chaîne verte diffère significativement entre clusters (test Chi‑deux, p < 0,001)
 - Les clusters fournisseurs les plus performants présentent un niveau de digitalisation supérieur
 - Le cluster le plus vulnérable cumule faible digitalisation, faible taux de chaîne verte et rentabilité inférieure
 
@@ -91,10 +97,7 @@ Le projet est structuré en 5 scripts reproductibles :
 - L'effet est statistiquement très significatif (p < 0,001)
 - La digitalisation ne présente pas d'effet modérateur additionnel significatif sur la relation chaîne–performance
 
-### 📊 Chiffres clés de l'étude
-
 #### Répartition des clusters (période T2)
-
 | Niveau fournisseur | Effectif | Part   | Profil associé                                        |
 |:-------------------|:--------:|:------:|:------------------------------------------------------|
 | 1                  |   190    |  6,6 % | Vulnérable : concentration élevée, faible résilience  |
@@ -109,9 +112,7 @@ Le projet est structuré en 5 scripts reproductibles :
 | 3             |  1 642   | 56,9 % | Diversifié : clientèle large et résiliente  |
 
 #### Impact de la classification sur la rentabilité
-
 Résultats des régressions avec contrôles et effets fixes secteur :
-
 | Groupe                  | Écart de ROAA par rapport au groupe de référence | Niveau de significativité |
 |:------------------------|:------------------------------------------------:|:-------------------------:|
 | Fournisseurs niveau 2   |                   + 3,7 points                   |       *** p < 0,001       |
@@ -120,7 +121,6 @@ Résultats des régressions avec contrôles et effets fixes secteur :
 | Clients niveau 3        |                   + 1,7 points                   |        ** p < 0,05        |
 
 #### Effet causal de la chaîne verte (après appariement PSM)
-
 | Groupe                          | ROAA moyen |
 |:--------------------------------|:----------:|
 | Entreprises sans chaîne verte   |   4,06 %   |
@@ -128,14 +128,11 @@ Résultats des régressions avec contrôles et effets fixes secteur :
 | **Gain moyen de rentabilité**   | **+ 1,45 point** |
 
 #### Inversion de la hiérarchie avant / après pandémie
-
 Effet du groupe fournisseurs niveau 2 par rapport au groupe 1 :
-
 | Période             | Effet sur la ROAA  | Interprétation                                       |
 |:--------------------|:------------------:|:-----------------------------------------------------|
 | T1 (2015 – 2018)    |  – 1,8 point ***   | La concentration fournisseur était plus rentable      |
 | T2 (2019 – 2023)    |  + 3,7 points ***  | La diversification résiliente devient plus performante |
-
 
 ### Résultat majeur : inversion de la hiérarchie entre T1 et T2
 La crise sanitaire a profondément modifié la relation entre structure de chaîne et performance :
@@ -153,48 +150,72 @@ Après appariement sur score de propension pour neutraliser les biais de sélect
 - Les résultats principaux restent significatifs après exclusion des valeurs extrêmes de ROAA
 - L'effet de la classification est présent dans les deux groupes de digitalisation, mais plus marqué dans les entreprises faiblement digitalisées
 
-## 💡 Implications managériales et recommandations stratégiques
+### 🤖 Résultats Modélisation Prédictive (Machine Learning)
+Deux modèles entraînés sur jeu d’entraînement 80 %, évalués sur jeu de test 20 %.
 
-Au-delà des résultats statistiques, cette segmentation fournit des pistes d’action concrètes pour les directions de la chaîne d’approvisionnement.
+#### Modèle 1 : Régression (prédiction de la rentabilité ROAA)
+| Modèle               | RMSE      | R² (jeu de test) |
+|:---------------------|:---------:|:----------------:|
+| Régression linéaire  | 0,05277   | 0,164            |
+| Forêt aléatoire      | 0,04681   | 0,329            |
+
+👉 La forêt aléatoire améliore nettement la prédiction par rapport à la régression linéaire simple.
+
+**Top 5 variables prédictives de la rentabilité :**
+1. croissance des actifs
+2. concentration clients
+3. concentration fournisseurs
+4. nature de la propriété
+5. chaîne verte
+
+#### Modèle 2 : Classification (détection des entreprises vulnérables côté fournisseurs)
+Forêt aléatoire pour distinguer les profils `vulnerable` / `resilient`.
+
+**Top 5 variables prédictives du risque fournisseur :**
+1. croissance des actifs
+2. concentration clients
+3. productivité verte
+4. concentration fournisseurs
+5. volatilité du chiffre d’affaires
+
+> Enseignement clé ML : la concentration du portefeuille client est un facteur de risque aussi important que la concentration de la base fournisseurs.
+
+## 💡 Implications managériales et recommandations stratégiques
+Au‑delà des résultats statistiques, cette segmentation fournit des pistes d’action concrètes pour les directions de la chaîne d’approvisionnement.
 
 ### Recommandations par profil de classification
-
 #### Côté fournisseurs
-
 | Profil | Diagnostic stratégique | Recommandations opérationnelles |
 |:---|:---|:---|
-| **Niveau 1 – Vulnérable** | Forte concentration, exposition majeure aux risques de rupture | 🚨 **Priorité haute** : lancer immédiatement un programme de diversification fournisseurs ; constituer un pool de fournisseurs de secours ; réduire la dépendance vis-à-vis des fournisseurs critiques |
+| **Niveau 1 – Vulnérable** | Forte concentration, exposition majeure aux risques de rupture | 🚨 **Priorité haute** : lancer immédiatement un programme de diversification fournisseurs ; constituer un pool de fournisseurs de secours ; réduire la dépendance vis‑à‑vis des fournisseurs critiques |
 | **Niveau 2 – Intermédiaire** | Structure équilibrée majoritaire, risque modéré | ⚙️ **Optimisation** : maintenir l’équilibre actuel ; travailler sur la réduction des coûts par regroupement de commandes ; développer la digitalisation des échanges |
 | **Niveau 3 – Performant** | Bonne diversification et maîtrise des risques | 🤝 **Partenariat stratégique** : considérer ce périmètre comme le socle fournisseur de référence ; négocier des cadres de coopération à long terme ; mutualiser les efforts d’amélioration continue |
 | **Niveau 4 – Diversifié** | Base très étendue, complexité de gestion élevée | 📊 **Rationalisation** : consolider la base fournisseurs sur les articles à faible risque ; garder la diversification sur les postes stratégiques ; harmoniser les contrats et les processus |
 
 #### Côté clients
-
 | Profil | Diagnostic stratégique | Recommandations opérationnelles |
 |:---|:---|:---|
-| **Niveau 1 – Concentré** | Forte dépendance vis-à-vis de quelques clients majeurs | ⚠️ **Réduction du risque** : développer activement de nouveaux clients pour diminuer la concentration ; mettre en place des contrats pluriannuels pour sécuriser le chiffre d’affaires |
+| **Niveau 1 – Concentré** | Forte dépendance vis‑à‑vis de quelques clients majeurs | ⚠️ **Réduction du risque** : développer activement de nouveaux clients pour diminuer la concentration ; mettre en place des contrats pluriannuels pour sécuriser le chiffre d’affaires |
 | **Niveau 2 – Intermédiaire** | Portefeuille équilibré | 🎯 **Croissance ciblée** : maintenir la mixité client ; concentrer les efforts commerciaux sur les segments les plus rentables |
 | **Niveau 3 – Diversifié** | Clientèle large, faible risque de concentration | ✅ **Standardisation** : généraliser les processus de livraison et de service client ; optimiser les coûts de gestion grâce à la standardisation des offres |
 
 ### Enseignement clé : la résilience est devenue un actif économique
-
-Le résultat le plus marquant de l’étude est le **renversement complet de la hiérarchie de performance** entre les deux périodes :
+Le résultat le plus marquant de l’étude est le **renversement complet de la hiérarchie de performance** entre les deux périodes :
 
 > Avant la pandémie, une structure de chaîne concentrée permettait de meilleures marges grâce aux effets d’échelle et à l’optimisation des coûts.
 > Après la crise sanitaire, les entreprises disposant d’une chaîne diversifiée et résiliente affichent une rentabilité significativement supérieure.
 
-**Conclusion managériale** :
-Le passage d’une logique de **« cost optimization »** à une logique de **« resilience optimization »** n’est pas seulement un choix de prudence, c’est un investissement qui se traduit par un gain mesurable de rentabilité en période d’incertitude.
-
+**Conclusion managériale** :
+Le passage d’une logique de **« cost optimization »** à une logique de **« resilience optimization »** n’est pas seulement un choix de prudence, c’est un investissement qui se traduit par un gain mesurable de rentabilité en période d’incertitude.
 
 ## 📂 Structure du projet
-
 - **`R/`** : Scripts d'analyse exécutables dans l'ordre numérique
   - `01_pretraitement_donnees.R` : Nettoyage, agrégation par période, winsorisation et standardisation
-  - `02_clustering_kmeans.R` : Classification K-means double + analyse de migration T1/T2
+  - `02_clustering_kmeans.R` : Classification K‑means double + analyse de migration T1/T2
   - `03_analyse_moderateurs.R` : Étude des effets digital et chaîne verte par cluster
   - `04_regressions_econometriques.R` : Modèles OLS avec effets fixes et erreurs robustes
   - `05_approfondissement_econometrique.R` : Robustesse, hétérogénéité et PSM
+  - `06_modelisation_predictive.R` : Modélisation ML régression + classification risque fournisseur
 
 - **`donnees/`** : Fichiers de données intermédiaires au format `.rds`
   - Les données brutes et fichiers générés sont ignorés par `.gitignore`
@@ -204,28 +225,28 @@ Le passage d’une logique de **« cost optimization »** à une logique de **«
   - `moderateurs/` : Tableaux et graphiques sur les effets modérateurs
   - `regressions/` : Tableaux des modèles économétriques de base
   - `robustesse/` : Tableaux des tests de robustesse, hétérogénéité et PSM
-  
+  - `predictif/` : Métriques ML, importance variables, modèles `.rds` sauvegardés
+
 - Fichiers racine
   - `.gitignore` : Fichiers à exclure du versionnement
   - `README.md` : Documentation du projet
-  - `systeme-segmentation-chaine-approvisionnement.Rproj` : Projet RStudio
+  - `systeme‑segmentation‑chaine‑approvisionnement.Rproj` : Projet RStudio
 
 ## 🚀 Pour reproduire l'analyse
-
 1.  Cloner le dépôt
 2.  Placer le fichier de données brutes `data2.xlsx` dans le dossier `donnees/`
-3.  Exécuter les scripts dans l'ordre numérique de 01 à 05
+3.  Exécuter les scripts dans l'ordre numérique de 01 à 06
 4.  Tous les résultats (graphiques et tableaux CSV) sont générés automatiquement dans le dossier `resultats/`
 
 ## 🧰 Technologies utilisées
-
 - **R 4.5.3**
 - `tidyverse` pour la manipulation de données et la visualisation
 - `readxl` pour l'import Excel
 - `factoextra` pour la détermination du nombre de clusters
 - `fixest` pour les régressions à haute performance et erreurs robustes
 - `MatchIt` pour l'appariement sur score de propension (PSM)
+- `randomForest` pour la modélisation prédictive
+- `caret` pour la séparation train/test et métriques de classification
 
 ## 📝 Auteur
-
 Projet réalisé par **kaluba luboya jacob** dans le cadre d'un travail de recherche sur la résilience des chaînes d'approvisionnement et la transformation verte.
