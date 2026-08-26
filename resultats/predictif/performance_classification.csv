@@ -1,2 +1,2 @@
-Modele;Accuracy;Precision;Rappel
-Forêt aléatoire - Classification risque fournisseur;0,947619047619048;0,949760765550239;0,99748743718593
+Modele,Accuracy,Kappa
+Forêt aléatoire - Classification risque fournisseur,0.948,0.075
