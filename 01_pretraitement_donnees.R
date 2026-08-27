@@ -173,3 +173,33 @@ cat("Période T1 (2015-2018) :", nrow(donnees_T1), "entreprises\n")
 cat("Période T2 (2019-2023) :", nrow(donnees_T2), "entreprises\n")
 cat("Indicateurs de clustering fournisseurs :", length(vars_clust_fournisseurs), "\n")
 cat("Indicateurs de clustering clients :", length(vars_clust_clients), "\n")
+
+
+# ------------------------------------------------------------------------------
+# Export paramètres de standardisation pour future application Shiny (base R seulement)
+# Permet d'appliquer EXACTEMENT la même transformation Z‑score sur les données saisies par utilisateur
+# ------------------------------------------------------------------------------
+library(tidyverse)
+dir.create("resultats/predictif", showWarnings = FALSE, recursive = TRUE)
+
+# Extraire uniquement les colonnes de clustering
+df_temp_std <- donnees_T1[, toutes_vars_clust]
+
+# Calcul moyenne / ecart‑type pour chaque variable
+parametres_standardisation <- data.frame()
+for(col in colnames(df_temp_std)){
+  parametres_standardisation[1, paste0(col,"_moyenne")] <- mean(df_temp_std[[col]], na.rm = TRUE)
+  parametres_standardisation[1, paste0(col,"_ecart")]   <- sd(df_temp_std[[col]], na.rm = TRUE)
+}
+saveRDS(parametres_standardisation, "resultats/predictif/parametres_std.rds")
+
+# Calcul bornes winsorisation 1%‑99%
+bornes_winsor <- data.frame()
+for(col in colnames(df_temp_std)){
+  q_vals <- quantile(df_temp_std[[col]], probs = c(0.01,0.99), na.rm = TRUE)
+  bornes_winsor[1, paste0(col,"_q01")] <- q_vals[1]
+  bornes_winsor[1, paste0(col,"_q99")] <- q_vals[2]
+}
+saveRDS(bornes_winsor, "resultats/predictif/bornes_winsor.rds")
+
+cat("\n Fichiers paramètres Shiny exportés dans resultats/predictif/\n")
