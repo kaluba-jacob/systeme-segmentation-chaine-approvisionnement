@@ -153,3 +153,30 @@ cat("\n--- Répartition fournisseurs T2 ---\n")
 print(profil_fourn_T2 %>% select(niveau_fournisseur, effectif, pourcentage))
 cat("\n--- Répartition clients T2 ---\n")
 print(profil_client_T2 %>% select(niveau_client, effectif, pourcentage))
+
+# ------------------------------------------------------------------------------
+# Export des centroïdes des clusters pour application Shiny
+# Permet d'assigner une nouvelle entreprise au profil le plus proche
+# ------------------------------------------------------------------------------
+dir.create("resultats/predictif", showWarnings = FALSE, recursive = TRUE)
+
+set.seed(123)
+# K-means fournisseurs (k=4) sur données standardisées T2
+kmeans_fourn_export <- kmeans(
+  donnees_T2 %>% select(all_of(vars_fourn_std)),
+  centers = 4,
+  nstart = 25
+)
+
+# K-means clients (k=3) sur données standardisées T2
+kmeans_cli_export <- kmeans(
+  donnees_T2 %>% select(all_of(vars_clients_std)),
+  centers = 3,
+  nstart = 25
+)
+
+# Sauvegarde des centroides
+saveRDS(kmeans_fourn_export$centers, "resultats/predictif/centroides_fournisseurs.rds")
+saveRDS(kmeans_cli_export$centers,   "resultats/predictif/centroides_clients.rds")
+
+cat("\n Centroïdes clusters exportés dans resultats/predictif/\n")
