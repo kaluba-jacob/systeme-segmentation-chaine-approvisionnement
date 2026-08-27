@@ -1,5 +1,5 @@
 Prediction,Reference,Freq
 resilient,resilient,397
 vulnerable,resilient,1
-resilient,vulnerable,21
-vulnerable,vulnerable,1
+resilient,vulnerable,22
+vulnerable,vulnerable,0
