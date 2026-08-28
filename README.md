@@ -1,14 +1,30 @@
 # Système de segmentation double de la chaîne d'approvisionnement
+
 > Étude empirique sur entreprises cotées : classification fournisseurs × clients, effets modérateurs de la transformation digitale et de la chaîne verte, et impact sur la performance économique.
 > Empirical study on listed companies: supplier–customer classification, moderating effects of digital transformation and green supply chain, and impact on economic performance.
 
+## 📱 Application Shiny en ligne
+
+Outil interactif de diagnostic de la chaîne d'approvisionnement, déployé publiquement :
+
+👉 **https://jacob08.shinyapps.io/outil-diagnostic-supply-chain/**
+
+L'application permet de :
+- **Diagnostiquer le profil de risque** côté fournisseurs et côté clients à partir d'indicateurs clés
+- Obtenir des **recommandations stratégiques** adaptées à chaque niveau de classification
+- Consulter la **méthodologie** du modèle de prédiction randomForest
+
+> 💡 L'application est développée en R Shiny avec le thème `bslib`. Le code source est disponible dans le fichier `app.R` à la racine du dépôt.
 
 ## 📋 Présentation du projet
+
 Ce projet développe un système de segmentation bidirectionnel de la chaîne d'approvisionnement appliqué à un échantillon d'entreprises chinoises cotées sur deux périodes :
+
 - **Période T1** : 2015 – 2018 (avant la pandémie)
 - **Période T2** : 2019 – 2023 (pandémie et reprise post‑Covid)
 
 L'objectif est de classifier les entreprises selon la structure de leur base fournisseurs et de leur portefeuille clients, puis d'étudier :
+
 1.  La migration structurelle entre les deux périodes
 2.  L'effet modérateur de la transformation digitale
 3.  L'effet modérateur de l'adoption d'une chaîne verte
@@ -17,6 +33,7 @@ L'objectif est de classifier les entreprises selon la structure de leur base fou
 6.  Modélisation prédictive machine learning : prédire rentabilité et risque fournisseur
 
 ## 🎯 Objectifs de recherche
+
 - Construire une typologie des structures de chaîne d'approvisionnement par clustering K‑means
 - Mesurer la résilience structurelle des entreprises avant et après la crise sanitaire
 - Évaluer si la digitalisation renforce la performance des différentes configurations
@@ -24,8 +41,10 @@ L'objectif est de classifier les entreprises selon la structure de leur base fou
 - Estimer économétriquement l'impact de la classification sur la rentabilité
 - Vérifier la robustesse des résultats et corriger les biais d'endogénéité
 - Développer des modèles prédictifs pour anticiper la rentabilité et le risque fournisseur des entreprises
+- Déployer un outil interactif Shiny de diagnostic pour les praticiens
 
 ## 📊 Données
+
 Échantillon de **3 227 entreprises** sur la période la plus récente (T2), avec 1 674 entreprises présentes sur les deux périodes (panel équilibré).
 
 **Sources** : Données financières et de chaîne d'approvisionnement d'entreprises cotées.
@@ -35,6 +54,7 @@ L'objectif est de classifier les entreprises selon la structure de leur base fou
 - Côté clients : concentration clientèle, volatilité du chiffre d'affaires, ratio de flux, délai de paiement, taux de retour
 
 ## 🛠️ Méthodologie
+
 Le projet est structuré en 6 scripts reproductibles :
 
 ### Étape 1 : Prétraitement des données
@@ -82,6 +102,7 @@ Le projet est structuré en 6 scripts reproductibles :
 - Sauvegarde des modèles entraînés au format `.rds`
 
 ## 📌 Principaux résultats
+
 ### Classification
 - **4 profils fournisseurs** : du profil vulnérable (forte concentration, faible résilience) au profil diversifié et résilient
 - **3 profils clients** : du profil concentré au profil diversifié et performant
@@ -98,6 +119,7 @@ Le projet est structuré en 6 scripts reproductibles :
 - La digitalisation ne présente pas d'effet modérateur additionnel significatif sur la relation chaîne–performance
 
 #### Répartition des clusters (période T2)
+
 | Niveau fournisseur | Effectif | Part   | Profil associé                                        |
 |:-------------------|:--------:|:------:|:------------------------------------------------------|
 | 1                  |   190    |  6,6 % | Vulnérable : concentration élevée, faible résilience  |
@@ -113,6 +135,7 @@ Le projet est structuré en 6 scripts reproductibles :
 
 #### Impact de la classification sur la rentabilité
 Résultats des régressions avec contrôles et effets fixes secteur :
+
 | Groupe                  | Écart de ROAA par rapport au groupe de référence | Niveau de significativité |
 |:------------------------|:------------------------------------------------:|:-------------------------:|
 | Fournisseurs niveau 2   |                   + 3,7 points                   |       *** p < 0,001       |
@@ -121,6 +144,7 @@ Résultats des régressions avec contrôles et effets fixes secteur :
 | Clients niveau 3        |                   + 1,7 points                   |        ** p < 0,05        |
 
 #### Effet causal de la chaîne verte (après appariement PSM)
+
 | Groupe                          | ROAA moyen |
 |:--------------------------------|:----------:|
 | Entreprises sans chaîne verte   |   4,06 %   |
@@ -129,6 +153,7 @@ Résultats des régressions avec contrôles et effets fixes secteur :
 
 #### Inversion de la hiérarchie avant / après pandémie
 Effet du groupe fournisseurs niveau 2 par rapport au groupe 1 :
+
 | Période             | Effet sur la ROAA  | Interprétation                                       |
 |:--------------------|:------------------:|:-----------------------------------------------------|
 | T1 (2015 – 2018)    |  – 1,8 point ***   | La concentration fournisseur était plus rentable      |
@@ -154,6 +179,7 @@ Après appariement sur score de propension pour neutraliser les biais de sélect
 Deux modèles entraînés sur jeu d’entraînement 80 %, évalués sur jeu de test 20 %.
 
 #### Modèle 1 : Régression (prédiction de la rentabilité ROAA)
+
 | Modèle               | RMSE      | R² (jeu de test) |
 |:---------------------|:---------:|:----------------:|
 | Régression linéaire  | 0,05277   | 0,164            |
@@ -161,7 +187,7 @@ Deux modèles entraînés sur jeu d’entraînement 80 %, évalués sur jeu de
 
 👉 La forêt aléatoire améliore nettement la prédiction par rapport à la régression linéaire simple.
 
-**Top 5 variables prédictives de la rentabilité :**
+**Top 5 variables prédictives de la rentabilité :**
 1. croissance des actifs
 2. concentration clients
 3. concentration fournisseurs
@@ -171,20 +197,23 @@ Deux modèles entraînés sur jeu d’entraînement 80 %, évalués sur jeu de
 #### Modèle 2 : Classification (détection des entreprises vulnérables côté fournisseurs)
 Forêt aléatoire pour distinguer les profils `vulnerable` / `resilient`.
 
-**Top 5 variables prédictives du risque fournisseur :**
+**Top 5 variables prédictives du risque fournisseur :**
 1. croissance des actifs
 2. concentration clients
 3. productivité verte
 4. concentration fournisseurs
 5. volatilité du chiffre d’affaires
 
-> Enseignement clé ML : la concentration du portefeuille client est un facteur de risque aussi important que la concentration de la base fournisseurs.
+> Enseignement clé ML : la concentration du portefeuille client est un facteur de risque aussi important que la concentration de la base fournisseurs.
 
 ## 💡 Implications managériales et recommandations stratégiques
+
 Au‑delà des résultats statistiques, cette segmentation fournit des pistes d’action concrètes pour les directions de la chaîne d’approvisionnement.
 
 ### Recommandations par profil de classification
+
 #### Côté fournisseurs
+
 | Profil | Diagnostic stratégique | Recommandations opérationnelles |
 |:---|:---|:---|
 | **Niveau 1 – Vulnérable** | Forte concentration, exposition majeure aux risques de rupture | 🚨 **Priorité haute** : lancer immédiatement un programme de diversification fournisseurs ; constituer un pool de fournisseurs de secours ; réduire la dépendance vis‑à‑vis des fournisseurs critiques |
@@ -193,6 +222,7 @@ Au‑delà des résultats statistiques, cette segmentation fournit des pistes d�
 | **Niveau 4 – Diversifié** | Base très étendue, complexité de gestion élevée | 📊 **Rationalisation** : consolider la base fournisseurs sur les articles à faible risque ; garder la diversification sur les postes stratégiques ; harmoniser les contrats et les processus |
 
 #### Côté clients
+
 | Profil | Diagnostic stratégique | Recommandations opérationnelles |
 |:---|:---|:---|
 | **Niveau 1 – Concentré** | Forte dépendance vis‑à‑vis de quelques clients majeurs | ⚠️ **Réduction du risque** : développer activement de nouveaux clients pour diminuer la concentration ; mettre en place des contrats pluriannuels pour sécuriser le chiffre d’affaires |
@@ -200,15 +230,16 @@ Au‑delà des résultats statistiques, cette segmentation fournit des pistes d�
 | **Niveau 3 – Diversifié** | Clientèle large, faible risque de concentration | ✅ **Standardisation** : généraliser les processus de livraison et de service client ; optimiser les coûts de gestion grâce à la standardisation des offres |
 
 ### Enseignement clé : la résilience est devenue un actif économique
-Le résultat le plus marquant de l’étude est le **renversement complet de la hiérarchie de performance** entre les deux périodes :
+Le résultat le plus marquant de l’étude est le **renversement complet de la hiérarchie de performance** entre les deux périodes :
 
 > Avant la pandémie, une structure de chaîne concentrée permettait de meilleures marges grâce aux effets d’échelle et à l’optimisation des coûts.
 > Après la crise sanitaire, les entreprises disposant d’une chaîne diversifiée et résiliente affichent une rentabilité significativement supérieure.
 
-**Conclusion managériale** :
-Le passage d’une logique de **« cost optimization »** à une logique de **« resilience optimization »** n’est pas seulement un choix de prudence, c’est un investissement qui se traduit par un gain mesurable de rentabilité en période d’incertitude.
+**Conclusion managériale** :
+Le passage d’une logique de **« cost optimization »** à une logique de **« resilience optimization »** n’est pas seulement un choix de prudence, c’est un investissement qui se traduit par un gain mesurable de rentabilité en période d’incertitude.
 
 ## 📂 Structure du projet
+
 - **`R/`** : Scripts d'analyse exécutables dans l'ordre numérique
   - `01_pretraitement_donnees.R` : Nettoyage, agrégation par période, winsorisation et standardisation
   - `02_clustering_kmeans.R` : Classification K‑means double + analyse de migration T1/T2
@@ -216,29 +247,45 @@ Le passage d’une logique de **« cost optimization »** à une logique de 
   - `04_regressions_econometriques.R` : Modèles OLS avec effets fixes et erreurs robustes
   - `05_approfondissement_econometrique.R` : Robustesse, hétérogénéité et PSM
   - `06_modelisation_predictive.R` : Modélisation ML régression + classification risque fournisseur
-
+- **`modeles/`** : Modèles machine learning sauvegardés au format `.rds` (utilisés par l'application Shiny)
+  - `modele_rf.rds` : Modèle de régression forêt aléatoire (prédiction ROAA)
+  - `modele_rf_classif.rds` : Modèle de classification forêt aléatoire (risque fournisseur)
+  - `parametres_std.rds` : Paramètres de standardisation Z‑score
+  - `bornes_winsor.rds` : Bornes de winsorisation
+  - `centroides_fournisseurs.rds` : Centroïdes des clusters fournisseurs
+  - `centroides_clients.rds` : Centroïdes des clusters clients
 - **`donnees/`** : Fichiers de données intermédiaires au format `.rds`
   - Les données brutes et fichiers générés sont ignorés par `.gitignore`
-
 - **`resultats/`** : Sorties automatiques de l'analyse
   - `clustering/` : Graphiques du coude, profils des clusters, matrices de migration
   - `moderateurs/` : Tableaux et graphiques sur les effets modérateurs
   - `regressions/` : Tableaux des modèles économétriques de base
   - `robustesse/` : Tableaux des tests de robustesse, hétérogénéité et PSM
   - `predictif/` : Métriques ML, importance variables, modèles `.rds` sauvegardés
-
 - Fichiers racine
+  - `app.R` : Application Shiny interactive de diagnostic (déployée sur shinyapps.io)
   - `.gitignore` : Fichiers à exclure du versionnement
   - `README.md` : Documentation du projet
   - `systeme‑segmentation‑chaine‑approvisionnement.Rproj` : Projet RStudio
 
 ## 🚀 Pour reproduire l'analyse
+
 1.  Cloner le dépôt
 2.  Placer le fichier de données brutes `data2.xlsx` dans le dossier `donnees/`
 3.  Exécuter les scripts dans l'ordre numérique de 01 à 06
 4.  Tous les résultats (graphiques et tableaux CSV) sont générés automatiquement dans le dossier `resultats/`
 
+### Lancer l'application Shiny en local
+
+1.  Cloner le dépôt
+2.  Ouvrir le projet dans RStudio
+3.  Ouvrir le fichier `app.R`
+4.  Cliquer sur **Run App**
+
+> L'application est aussi accessible en ligne : https://jacob08.shinyapps.io/outil-diagnostic-supply-chain/
+
 ## 🧰 Technologies utilisées
+
 - **R 4.5.3**
 - `tidyverse` pour la manipulation de données et la visualisation
 - `readxl` pour l'import Excel
@@ -247,6 +294,9 @@ Le passage d’une logique de **« cost optimization »** à une logique de 
 - `MatchIt` pour l'appariement sur score de propension (PSM)
 - `randomForest` pour la modélisation prédictive
 - `caret` pour la séparation train/test et métriques de classification
+- `shiny` + `bslib` pour le développement de l'application web interactive
+- **shinyapps.io** pour le déploiement public de l'application
 
 ## 📝 Auteur
+
 Projet réalisé par **kaluba luboya jacob** dans le cadre d'un travail de recherche sur la résilience des chaînes d'approvisionnement et la transformation verte.
