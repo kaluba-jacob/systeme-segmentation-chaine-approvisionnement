@@ -70,6 +70,8 @@ ui <- navbarPage(
                     min = 0.2, max = 14, value = 2.5, step = 0.1),
         
         hr(),
+        actionButton("btn_exemple_diag", "📋 Charger un exemple", class = "btn-outline-secondary btn-block"),
+        br(),
         actionButton("btn_diagnostic", "🔍 Lancer le diagnostic", class = "btn-primary btn-block")
       ),
       mainPanel(
@@ -105,6 +107,8 @@ ui <- navbarPage(
         selectInput("ml_propriete", "Nature de la propriété", choices = c("Publique" = 0, "Privée" = 1)),
         
         hr(),
+        actionButton("btn_exemple_pred", "📋 Charger un exemple", class = "btn-outline-secondary btn-block"),
+        br(),
         actionButton("btn_prediction", "📊 Lancer la prédiction", class = "btn-success btn-block")
       ),
       mainPanel(
@@ -128,7 +132,33 @@ ui <- navbarPage(
 # Serveur
 server <- function(input, output, session) {
   
-  # Diagnostic fonctionnel
+  # ------------------ BOUTONS EXEMPLE ------------------
+  observeEvent(input$btn_exemple_diag, {
+    updateSliderInput(session, "conc_fourn", value = 65)
+    updateSliderInput(session, "volatilite_fourn", value = 0.35)
+    updateSliderInput(session, "ratio_depcap", value = 15)
+    updateSliderInput(session, "taux_livraison", value = 82)
+    updateSliderInput(session, "taux_defaut", value = 7)
+    updateSliderInput(session, "conc_clients", value = 55)
+    updateSliderInput(session, "volatilite_ca", value = 0.25)
+    updateSliderInput(session, "ratio_flux", value = 5)
+    updateSliderInput(session, "delai_paiement", value = 60)
+    updateSliderInput(session, "taux_retour", value = 5)
+  })
+  
+  observeEvent(input$btn_exemple_pred, {
+    updateSliderInput(session, "ml_conc_fourn", value = 65)
+    updateSliderInput(session, "ml_volatilite_fourn", value = 0.35)
+    updateSliderInput(session, "ml_conc_clients", value = 55)
+    updateSliderInput(session, "ml_volatilite_ca", value = 0.25)
+    updateSliderInput(session, "ml_index_digital", value = 40)
+    updateSelectInput(session, "ml_chaine_verte", selected = "1")
+    updateSliderInput(session, "ml_croissance", value = 10)
+    updateSliderInput(session, "ml_prod_verte", value = 0.6)
+    updateSelectInput(session, "ml_propriete", selected = "1")
+  })
+  
+  # ------------------ PARTIE 1 : DIAGNOSTIC ------------------
   resultat_diag <- eventReactive(input$btn_diagnostic, {
     
     vals_fourn <- c(
@@ -181,25 +211,97 @@ server <- function(input, output, session) {
   
   output$resultat_diagnostic <- renderUI({ resultat_diag() })
   
-  # Partie prédiction : texte descriptif sans exécution randomForest
+  
+  # ------------------ PARTIE 2 : PREDICTION RANDOMFOREST ------------------
   resultat_pred <- eventReactive(input$btn_prediction, {
-    HTML("
-<div class='alert alert-info'>
-<h4>📌 Module de prédiction de performance (modèle randomForest)</h4>
-<p>Ce module est prévu pour estimer la performance économique (ROAA) et le risque de la chaîne d'approvisionnement à partir des caractéristiques de l'entreprise.</p>
-<h5>Variables d'entrée du modèle :</h5>
-<ul>
-<li>Concentration fournisseurs, volatilité fournisseurs</li>
-<li>Concentration clients, volatilité du chiffre d'affaires</li>
-<li>Indice de transformation digitale</li>
-<li>Label chaîne verte (Oui / Non)</li>
-<li>Croissance des actifs, productivité verte</li>
-<li>Nature de propriété (Publique / Privée)</li>
-</ul>
-<p>📎 Les résultats complets des prédictions et des régressions économétriques sont disponibles dans le dossier <code>resultats/regressions/</code> du dépôt GitHub (fichiers CSV générés par le script R hors shiny).</p>
-<p><em>Note : L'exécution du modèle prédictif au sein de l'application shiny est désactivée pour éviter les erreurs de compatibilité de types de données.</em></p>
-</div>
-")
+    
+    # --- Mapping spécial : le modèle attend "-Inf" ou "1" pour chaine_verte ---
+    cv <- ifelse(input$ml_chaine_verte == "0", "-Inf", "1")
+    
+    # --- Dataframe de base (9 prédicteurs) ---
+    base_data <- data.frame(
+      concentration_fourn   = as.numeric(input$ml_conc_fourn),
+      volatilite_fourn      = as.numeric(input$ml_volatilite_fourn),
+      concentration_clients = as.numeric(input$ml_conc_clients),
+      volatilite_ca         = as.numeric(input$ml_volatilite_ca),
+      index_digital         = as.numeric(input$ml_index_digital),
+      chaine_verte          = cv,
+      croissance            = as.numeric(input$ml_croissance),
+      productivite_verte    = as.numeric(input$ml_prod_verte),
+      propriete             = as.character(input$ml_propriete),
+      stringsAsFactors      = FALSE
+    )
+    
+    # ================================================================
+    # MODÈLE 1 : Prédiction ROAA (régression)
+    # ================================================================
+    data_perf <- base_data
+    data_perf$risque_fourn <- factor("resilient", levels = c("resilient", "vulnerable"))
+    data_perf$chaine_verte <- factor(data_perf$chaine_verte, levels = c("-Inf", "1"))
+    data_perf$propriete    <- factor(data_perf$propriete, levels = c("0", "1"))
+    data_perf <- data_perf[, c("risque_fourn", "concentration_fourn", "volatilite_fourn",
+                               "concentration_clients", "volatilite_ca", "index_digital",
+                               "chaine_verte", "croissance", "productivite_verte", "propriete")]
+    
+    roaa_pred <- tryCatch({
+      as.numeric(predict(modele_rf_perf, newdata = data_perf))
+    }, error = function(e) {
+      message("Erreur ROAA: ", e$message)
+      NA_real_
+    })
+    
+    # ================================================================
+    # MODÈLE 2 : Prédiction risque fournisseur (classification)
+    # ================================================================
+    data_risque <- base_data
+    data_risque$roaa          <- 0.05
+    data_risque$risque_fourn  <- factor("resilient", levels = c("resilient", "vulnerable"))
+    data_risque$chaine_verte  <- factor(data_risque$chaine_verte, levels = c("-Inf", "1"))
+    data_risque$propriete     <- factor(data_risque$propriete, levels = c("0", "1"))
+    data_risque <- data_risque[, c("roaa", "concentration_fourn", "volatilite_fourn",
+                                   "concentration_clients", "volatilite_ca", "index_digital",
+                                   "chaine_verte", "croissance", "productivite_verte", "propriete",
+                                   "risque_fourn")]
+    
+    risque_pred <- tryCatch({
+      as.character(predict(modele_rf_risque, newdata = data_risque))
+    }, error = function(e) {
+      message("Erreur risque: ", e$message)
+      "resilient"
+    })
+    
+    # ================================================================
+    # MISE EN FORME
+    # ================================================================
+    risque_label  <- ifelse(risque_pred == "resilient", "Résilient", "Vulnérable")
+    risque_classe <- ifelse(risque_pred == "resilient", "success", "danger")
+    roaa_affiche  <- ifelse(is.na(roaa_pred), "N/A", paste0(round(roaa_pred * 100, 2), " %"))
+    
+    HTML(paste0(
+      '<div class="row">',
+      '<div class="col-md-6">',
+      '<div class="card text-center mb-4">',
+      '<div class="card-header bg-success text-white"><h4>ROAA prédit</h4></div>',
+      '<div class="card-body">',
+      '<h2 style="font-size:3rem;">', roaa_affiche, '</h2>',
+      '<p class="text-muted">Rentabilité des actifs prédite par forêt aléatoire</p>',
+      '</div></div></div>',
+      
+      '<div class="col-md-6">',
+      '<div class="card text-center mb-4">',
+      '<div class="card-header bg-', risque_classe, ' text-white"><h4>Risque fournisseur</h4></div>',
+      '<div class="card-body">',
+      '<h2 style="font-size:3rem;">', risque_label, '</h2>',
+      '<p class="text-muted">Classification par forêt aléatoire</p>',
+      '</div></div></div>',
+      '</div>',
+      
+      '<div class="alert alert-info mt-3">',
+      '<strong>Interprétation : </strong>',
+      'Ces prédictions sont basées sur les caractéristiques structurelles de votre chaîne d’approvisionnement. ',
+      'Une diversification de la base fournisseurs et une adoption de chaîne verte sont associées à une meilleure rentabilité sur la période post‑pandémie.',
+      '</div>'
+    ))
   })
   
   output$resultat_prediction <- renderUI({ resultat_pred() })

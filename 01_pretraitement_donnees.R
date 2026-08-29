@@ -174,16 +174,16 @@ cat("Période T2 (2019-2023) :", nrow(donnees_T2), "entreprises\n")
 cat("Indicateurs de clustering fournisseurs :", length(vars_clust_fournisseurs), "\n")
 cat("Indicateurs de clustering clients :", length(vars_clust_clients), "\n")
 
-
 # ------------------------------------------------------------------------------
 # Export paramètres de standardisation pour future application Shiny (base R seulement)
 # Permet d'appliquer EXACTEMENT la même transformation Z‑score sur les données saisies par utilisateur
+# IMPORTANT : les paramètres sont calculés sur T2 car les centroïdes K-means sont aussi sur T2
 # ------------------------------------------------------------------------------
 library(tidyverse)
 dir.create("resultats/predictif", showWarnings = FALSE, recursive = TRUE)
 
-# Extraire uniquement les colonnes de clustering
-df_temp_std <- donnees_T1[, toutes_vars_clust]
+# Extraire uniquement les colonnes de clustering depuis T2 (période de référence pour les centroïdes)
+df_temp_std <- donnees_T2[, toutes_vars_clust]
 
 # Calcul moyenne / ecart‑type pour chaque variable
 parametres_standardisation <- data.frame()
@@ -193,7 +193,7 @@ for(col in colnames(df_temp_std)){
 }
 saveRDS(parametres_standardisation, "resultats/predictif/parametres_std.rds")
 
-# Calcul bornes winsorisation 1%‑99%
+# Calcul bornes winsorisation 1%‑99% (également sur T2 pour cohérence)
 bornes_winsor <- data.frame()
 for(col in colnames(df_temp_std)){
   q_vals <- quantile(df_temp_std[[col]], probs = c(0.01,0.99), na.rm = TRUE)
@@ -203,3 +203,4 @@ for(col in colnames(df_temp_std)){
 saveRDS(bornes_winsor, "resultats/predictif/bornes_winsor.rds")
 
 cat("\n Fichiers paramètres Shiny exportés dans resultats/predictif/\n")
+cat(" (calculés sur T2 pour cohérence avec les centroïdes K-means)\n")
